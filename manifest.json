@@ -1,0 +1,62 @@
+{
+  "required_api_version": "^2.0.0",
+  "name": "Everywhere",
+  "description": "Near-instant system-wide file search using plocate",
+  "developer_name": "darioque",
+  "icon": "images/icon.svg",
+  "options": {
+    "query_debounce": 0.1
+  },
+  "preferences": [
+    {
+      "id": "key_system",
+      "type": "keyword",
+      "name": "Search home",
+      "description": "Search your home directory (fast, indexed)",
+      "default_value": "f"
+    },
+    {
+      "id": "key_all",
+      "type": "keyword",
+      "name": "Search everywhere",
+      "description": "Search home + all drives in /mnt (requires index)",
+      "default_value": "fa"
+    },
+    {
+      "id": "key_index",
+      "type": "keyword",
+      "name": "Manage indexes",
+      "description": "View index status and trigger rebuild",
+      "default_value": "fi"
+    },
+    {
+      "id": "linux_path",
+      "type": "text",
+      "name": "Home search path",
+      "description": "Path indexed for 'f' search (default: your home directory)",
+      "default_value": "~"
+    },
+    {
+      "id": "mnt_path",
+      "type": "text",
+      "name": "Drives path",
+      "description": "Root path containing drives to index for 'fa' search",
+      "default_value": "/mnt"
+    },
+    {
+      "id": "num_results",
+      "type": "input",
+      "name": "Number of results",
+      "description": "Max results to show per search",
+      "default_value": 10
+    },
+    {
+      "id": "query_icons",
+      "type": "select",
+      "name": "Query system icons",
+      "description": "Show filetype icons (slower) or default icons (faster)",
+      "default_value": "no",
+      "options": ["yes", "no"]
+    }
+  ]
+}

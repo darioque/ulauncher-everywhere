@@ -35,7 +35,7 @@ def get_mnt_db_paths(extension_dir: str) -> list[str]:
 
 
 def safe_name(path: str) -> str:
-    """Convert a path like /mnt/C: into a safe filename token like C_."""
+    """Convert a path like /mnt/C into a safe filename token like C."""
     return os.path.basename(path).replace(":", "_").replace(" ", "_")
 
 
@@ -137,6 +137,14 @@ def start_mnt_index(extension_dir: str, mnt_path: str, on_complete=None) -> bool
             dbs_dir = get_mnt_dbs_dir(extension_dir)
             os.makedirs(dbs_dir, exist_ok=True)
 
+            # Remove stale DB files from previous mount naming (e.g. mnt_C_.db
+            # from when drives were /mnt/C:) before rebuilding.
+            for old_db in glob.glob(os.path.join(dbs_dir, "mnt_*.db")):
+                try:
+                    os.remove(old_db)
+                except OSError as e:
+                    logger.warning(f"Could not remove stale DB {old_db}: {e}")
+
             try:
                 subdirs = [
                     os.path.join(mnt_path, d)
@@ -203,6 +211,7 @@ def setup_auto_update(extension_dir: str, linux_path: str, mnt_path: str) -> boo
             f.write(f'MNT_PATH="{mnt_path}"\n')
             f.write(f'DBS_DIR="{dbs_dir}"\n')
             f.write('mkdir -p "$DBS_DIR"\n')
+            f.write('rm -f "$DBS_DIR"/mnt_*.db\n')
             f.write('for drive in "$MNT_PATH"/*/; do\n')
             f.write('  [ -d "$drive" ] || continue\n')
             f.write('  safe=$(basename "$drive" | tr ":" "_" | tr " " "_")\n')

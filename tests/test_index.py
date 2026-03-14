@@ -28,14 +28,14 @@ def test_get_mnt_db_paths_empty_when_no_dbs(tmp_path):
 def test_get_mnt_db_paths_finds_db_files(tmp_path):
     dbs_dir = tmp_path / "dbs"
     dbs_dir.mkdir()
-    (dbs_dir / "mnt_C_.db").write_bytes(b"fake")
-    (dbs_dir / "mnt_D_.db").write_bytes(b"fake")
+    (dbs_dir / "mnt_C.db").write_bytes(b"fake")
+    (dbs_dir / "mnt_D.db").write_bytes(b"fake")
     result = get_mnt_db_paths(str(tmp_path))
     assert len(result) == 2
 
 
-def test_safe_name_strips_colon():
-    assert safe_name("/mnt/C:") == "C_"
+def test_safe_name_no_colon():
+    assert safe_name("/mnt/C") == "C"
 
 
 def test_safe_name_strips_space():
